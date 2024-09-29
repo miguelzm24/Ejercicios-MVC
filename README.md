@@ -15,4 +15,3 @@ services:
     image: php:8-fpm
     volumes:
       - ./php:/var/www/html
-    ~~~
