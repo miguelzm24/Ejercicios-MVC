@@ -1,20 +1,56 @@
 docker-compose.yml:
 ~~~
 services:
+  # nginx
   web:
+    container_name: web
     image: nginx:latest
     ports:
-      - "8080:80"
-    volumes:
-      - ./php:/var/www/html
-      - ./default.conf:/etc/nginx/conf.d/default.conf
+      - '8080:80'
     links:
-      - php-fpm
-
-  php-fpm:
-    image: php:8-fpm
+      - 'php'      
     volumes:
-      - ./php:/var/www/html
+      - ./src:/var/www/html
+      - ./default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - php
+
+  # PHP
+  php:
+    container_name: php
+    build:
+      dockerfile: Dockerfile-php
+      context: .
+    volumes:
+      - ./src:/var/www/html
+    depends_on:
+      - mariadb
+
+  # MariaDB Service
+  mariadb:
+    container_name: db
+    image: mariadb:10.9
+    ports:
+      - '8306:3306'    
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: mydatabase
+    volumes:
+      - './mysqldata:/var/lib/mysql'
+
+  # Adminer
+  adminer:
+    image: adminer:latest
+    container_name: adminer
+    environment:
+      ADMINER_DEFAULT_SERVER: db
+    restart: always
+    ports:
+      - 7777:8080  
+
+# Volumes
+volumes:
+  mysqldata:
 ~~~
 Dockerfile-php:
 ~~~
