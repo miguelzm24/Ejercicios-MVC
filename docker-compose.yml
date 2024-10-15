@@ -6,7 +6,7 @@ services:
     ports:
       - '8080:80'
     links:
-      - 'php'
+      - 'php'      
     volumes:
       - ./src:/var/www/html
       - ./default.conf:/etc/nginx/conf.d/default.conf
@@ -29,7 +29,7 @@ services:
     container_name: db
     image: mariadb:10.9
     ports:
-      - '8306:3306'
+      - '8306:3306'    
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: mydatabase
@@ -44,7 +44,7 @@ services:
       ADMINER_DEFAULT_SERVER: db
     restart: always
     ports:
-      - 7777:8080
+      - 7777:8080  
 
 # Volumes
 volumes:
